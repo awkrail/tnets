@@ -4,6 +4,8 @@
 #include <time.h>
 #include <sys/time.h>
 
+#include "platform.h"
+
 #include "util.h"
 
 /*
@@ -119,11 +121,36 @@ queue_pop(struct queue_head *queue)
   if(!queue || !queue->head)
     return NULL;
 
-  // TODO: implement queue_pop()
   entry = queue->head;
+  queue->head = entry->next;
+  if(!queue->head) {
+    queue->tail = NULL;
+  }
+  queue->num--;
+  data = entry->data;
+  memory_free(entry);
+  return data;
+}
 
+void *
+queue_peek(struct queue_head *queue)
+{
+  if(!queue || !queue->head)
+    return NULL;
 
+  return queue->head->data;
+}
 
+void
+queue_foreach(struct queue_head *queue, void (*func)(void *arg, void *data),
+              void *arg)
+{
+  struct queue_entry *entry;
 
+  if(!queue || !func)
+    return;
 
+  for(entry = queue->head; entry; entry = entry->next) {
+    func(arg, entry->data);
+  }
 }

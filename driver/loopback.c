@@ -58,7 +58,7 @@ loopback_transmit(struct net_device *dev, uint16_t type,
   return 0;
 }
 
-static 
+static int
 loopback_isr(unsigned int irq, void *id)
 {
   struct net_device *dev;
