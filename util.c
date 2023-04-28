@@ -68,3 +68,62 @@ hexdump(FILE *fp, const void *data, size_t size)
   fprintf(fp, "+------+-------------------------------------------------+------------------+\n");
   funlockfile(fp);
 }
+
+/*
+ * Queue
+ */
+struct queue_entry {
+  struct queue_entry *next;
+  void *data;
+};
+
+void
+queue_init(struct queue_head *queue)
+{
+  queue->head = NULL;
+  queue->tail = NULL;
+  queue->num = 0;
+}
+
+void *
+queue_push(struct queue_head *queue, void *data)
+{
+  struct queue_entry *entry;
+
+  if(!queue)
+    return NULL;
+
+  entry = memory_alloc(sizeof(*entry));
+  if(!entry)
+    return NULL;
+  entry->next = NULL;
+  entry->data = data;
+
+  if(queue->tail)
+    queue->tail->next = entry;
+  queue->tail = entry;
+
+  if(!queue->head)
+    queue->head = entry;
+
+  queue->num++;
+  return data;
+}
+
+void *
+queue_pop(struct queue_head *queue)
+{
+  struct queue_entry *entry;
+  void *data;
+
+  if(!queue || !queue->head)
+    return NULL;
+
+  // TODO: implement queue_pop()
+  entry = queue->head;
+
+
+
+
+
+}
