@@ -23,6 +23,10 @@
 #define NET_DEVICE_IS_UP(x) ((x)->flags & NET_DEVICE_FLAG_UP)
 #define NET_DEVICE_STATE(x) (NET_DEVICE_IS_UP(x) ? "up" : "down")
 
+#define NET_POROTOCOL_TYPE_IP   0x0800
+#define NET_POROTOCOL_TYPE_ARP  0x0806
+#define NET_POROTOCOL_TYPE_IPV6 0x86dd
+
 struct net_device {
   struct net_device *next;
   unsigned int index;
@@ -44,7 +48,8 @@ struct net_device {
 struct net_device_ops {
   int (*open)(struct net_device *dev);
   int (*close)(struct net_device *dev);
-  int (*transmit)(struct net_device *dev, uint16_t type, const uint8_t *data, size_t len, const void *dst);
+  int (*transmit)(struct net_device *dev, uint16_t type, 
+                  const uint8_t *data, size_t len, const void *dst);
 };
 
 extern struct net_device *
@@ -54,10 +59,17 @@ extern int
 net_device_register(struct net_device *dev);
 
 extern int
-net_device_output(struct net_device *dev, uint16_t type, const uint8_t *data, size_t len, const void *dst);
+net_device_output(struct net_device *dev, uint16_t type, 
+                  const uint8_t *data, size_t len, const void *dst);
+
+int
+net_protocol_register(uint16_t type, 
+                      void (*handler)(const uint8_t *data, size_t len, 
+                      struct net_device *dev));
 
 extern int
-net_input_handler(uint16_t type, const uint8_t *data, size_t len, struct net_device *dev);
+net_input_handler(uint16_t type, const uint8_t *data, 
+                  size_t len, struct net_device *dev);
 
 extern int
 net_run(void);
