@@ -46,4 +46,22 @@ queue_peek(struct queue_head *queue);
 extern void
 qeuue_foreach(struct queue_head *queue, void (*func)(void *arg, void *data), void *arg);
 
+/*
+ * Byteorder
+ */
+extern uint16_t
+hton16(uint16_t h);
+
+extern uint16_t
+ntoh16(uint16_t n);
+
+extern uint32_t
+hton32(uint32_t h);
+
+extern uint32_t
+ntoh32(uint32_t n);
+
+extern uint16_t
+cksum16(uint16_t *addr, uint16_t count, uint32_t init);
+
 #endif

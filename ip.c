@@ -14,6 +14,7 @@ struct ip_hdr {
   uint16_t id;
   uint16_t offset;
   uint8_t ttl;
+  uint8_t protocol;
   uint16_t sum;
   ip_addr_t src;
   ip_addr_t dst;
@@ -72,18 +73,12 @@ ip_dump(const uint8_t *data, size_t len)
   fprintf(stderr, "     ttl: %u\n", hdr->ttl);
   fprintf(stderr, "protocol: %u\n", hdr->protocol);
   fprintf(stderr, "     sum: 0x%04x\n", ntoh16(hdr->sum));
-  fprintf(stderr, "     src: %s\n", ip_addr_ntop(hdr->src, addr, sizeo(addr)));
-  fprintf(stderr, "     dst: %s\n", ip_addr_ntop(hdr->dst, addr, sizeo(addr)));
+  fprintf(stderr, "     src: %s\n", ip_addr_ntop(hdr->src, addr, sizeof(addr)));
+  fprintf(stderr, "     dst: %s\n", ip_addr_ntop(hdr->dst, addr, sizeof(addr)));
 #ifdef HEXDUMP
   hexdump(stderr, data, len);
 #endif
   funlockfile(stderr);
-}
-
-static void
-ip_input(const uint8_t *data, size_t len, struct net_device *dev)
-{
-  // TODO: implement ip_input
 }
 
 char *
@@ -99,8 +94,44 @@ ip_addr_ntop(ip_addr_t n, char *p, size_t size)
 static void
 ip_input(const uint8_t *data, size_t len, struct net_device *dev)
 {
-  debugf("dev=%s, len=%zu", dev->name, len);
-  debugdump(data, len);
+  struct ip_hdr *hdr;
+  uint8_t v;
+  uint16_t hlen, total, offset;
+
+  if(len < IP_HDR_SIZE_MIN) {
+    errorf("too short");
+    return;
+  }
+
+  hdr = (struct ip_hdr *)data;
+  v = (hdr->vhl & 0xf0) >> 4;
+  if(v != IP_VERSION_IPV4) {
+    errorf("IP version does not match to IPv4, v=%u", v);
+    return;
+  }
+  hlen = (hdr->vhl & 0x0f) << 2;
+  if(len < hlen) {
+    errorf("len is smaller than hlen: len=%u, hlen=%u", len, hlen);
+    return;
+  }
+  total = ntoh16(hdr->total); // OK?
+  if(len < total) {
+    errorf("len is smaller than total: len=%u, total=%u", len, total);
+    return;
+  }
+  
+  if(cksum16((uint16_t *)data, len, 0) != 0) {
+    errorf("checksum error");
+    return;
+  }
+
+  offset = ntoh16(hdr->offset);
+  if(offset & 0x2000 || offset & 0x1fff) {
+    errorf("fragments does not support");
+    return;
+  }
+  debugf("dev=%s, protocol=%u, total=%u", dev->name, hdr->protocol, total);
+  ip_dump(data, total);
 }
 
 int
