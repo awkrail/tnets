@@ -1,0 +1,209 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+APPS	Makefile	/^APPS = $/;"	m
+BASE	Makefile	/^BASE = platform\/linux$/;"	m
+CFLAGS	Makefile	/^CFLAGS := $(CFLAGS) -g -W -Wall -Wno-unused-parameter -iquote .$/;"	m
+CFLAGS	Makefile	/^CFLAGS := $(CFLAGS) -pthread -iquote $(BASE)$/;"	m
+DEFAULT_GATEWAY	test/test.h	14;"	d
+DRIVERS	Makefile	/^DRIVERS = driver\/dummy.o \\$/;"	m
+DUMMY_H	driver/dummy.h	2;"	d
+DUMMY_IRQ	driver/dummy.c	11;"	d	file:
+DUMMY_MTU	driver/dummy.c	10;"	d	file:
+ETHER_TAP_IP_ADDR	test/test.h	11;"	d
+ETHER_TAP_NAME	test/test.h	9;"	d
+ETHER_TAP_NETMASK	test/test.h	12;"	d
+IFNAMSIZ	net.h	8;"	d
+INTR_IRQ_BASE	platform/linux/platform.h	52;"	d
+INTR_IRQ_SHARED	platform/linux/platform.h	55;"	d
+INTR_IRQ_SOFTIRQ	platform/linux/platform.h	53;"	d
+IP_ADDR_ANY	ip.c	/^const ip_addr_t IP_ADDR_ANY       = 0x00000000;$/;"	v
+IP_ADDR_BROADCAST	ip.c	/^const ip_addr_t IP_ADDR_BROADCAST = 0xffffffff; $/;"	v
+IP_ADDR_LEN	ip.h	15;"	d
+IP_ADDR_STR_LEN	ip.h	16;"	d
+IP_H	ip.h	2;"	d
+IP_HDR_SIZE_MAX	ip.h	10;"	d
+IP_HDR_SIZE_MIN	ip.h	9;"	d
+IP_PAYLOAD_SIZE_MAX	ip.h	13;"	d
+IP_TOTAL_SIZE_MAX	ip.h	12;"	d
+IP_VERSION_IPV4	ip.h	7;"	d
+LOOPBACK_H	driver/loopback.h	2;"	d
+LOOPBACK_IP_ADDR	test/test.h	6;"	d
+LOOPBACK_IRQ	driver/loopback.c	13;"	d	file:
+LOOPBACK_MTU	driver/loopback.c	11;"	d	file:
+LOOPBACK_NETMASK	test/test.h	7;"	d
+LOOPBACK_QUEUE_LIMIT	driver/loopback.c	12;"	d	file:
+MUTEX_INITIALIZER	platform/linux/platform.h	29;"	d
+NET_DEVICE_ADDR_LEN	net.h	21;"	d
+NET_DEVICE_FLAG_BROADCAST	net.h	17;"	d
+NET_DEVICE_FLAG_LOOPBACK	net.h	16;"	d
+NET_DEVICE_FLAG_NEED_ARP	net.h	19;"	d
+NET_DEVICE_FLAG_P2P	net.h	18;"	d
+NET_DEVICE_FLAG_UP	net.h	15;"	d
+NET_DEVICE_IS_UP	net.h	23;"	d
+NET_DEVICE_STATE	net.h	24;"	d
+NET_DEVICE_TYPE_DUMMY	net.h	11;"	d
+NET_DEVICE_TYPE_ETHERNET	net.h	13;"	d
+NET_DEVICE_TYPE_LOOPBACK	net.h	12;"	d
+NET_H	net.h	2;"	d
+NET_POROTOCOL_TYPE_ARP	net.h	27;"	d
+NET_POROTOCOL_TYPE_IP	net.h	26;"	d
+NET_POROTOCOL_TYPE_IPV6	net.h	28;"	d
+OBJS	Makefile	/^OBJS := $(OBJS) $(BASE)\/intr.o$/;"	m
+OBJS	Makefile	/^OBJS = util.o \\$/;"	m
+PLATFORM_H	platform/linux/platform.h	2;"	d
+PRIV	driver/loopback.c	15;"	d	file:
+TESTS	Makefile	/^TESTS = test\/step0.exe \\$/;"	m
+TEST_H	test/test.h	2;"	d
+UTIL_H	util.h	2;"	d
+__BIG_ENDIAN	util.c	162;"	d	file:
+__LITTLE_ENDIAN	util.c	165;"	d	file:
+addr	net.h	/^  uint8_t addr[NET_DEVICE_ADDR_LEN];$/;"	m	struct:net_device
+alen	net.h	/^  uint16_t alen; \/* address length *\/$/;"	m	struct:net_device
+barrier	platform/linux/intr.c	/^static pthread_barrier_t barrier;$/;"	v	file:
+broadcast	net.h	/^    uint8_t broadcast[NET_DEVICE_ADDR_LEN];$/;"	m	union:net_device::__anon1
+byteorder	util.c	/^byteorder(void)$/;"	f	file:
+byteswap16	util.c	/^byteswap16(uint16_t v)$/;"	f	file:
+byteswap32	util.c	/^byteswap32(uint32_t v)$/;"	f	file:
+cksum16	util.c	/^cksum16(uint16_t *addr, uint16_t count, uint32_t init)$/;"	f
+close	net.h	/^  int (*close)(struct net_device *dev);$/;"	m	struct:net_device_ops
+data	driver/loopback.c	/^  uint8_t data[];$/;"	m	struct:loopback_queue_entry	file:
+data	net.c	/^  uint8_t data[];$/;"	m	struct:net_protocol_queue_entry	file:
+data	util.c	/^  void *data;$/;"	m	struct:queue_entry	file:
+debugdump	util.h	17;"	d
+debugdump	util.h	19;"	d
+debugf	util.h	14;"	d
+dev	net.c	/^  struct net_device *dev;$/;"	m	struct:net_protocol_queue_entry	typeref:struct:net_protocol_queue_entry::net_device	file:
+dev	platform/linux/intr.c	/^  void *dev;$/;"	m	struct:irq_entry	file:
+devices	net.c	/^static struct net_device *devices;$/;"	v	typeref:struct:net_device	file:
+dst	ip.c	/^  ip_addr_t dst;$/;"	m	struct:ip_hdr	file:
+dummy_init	driver/dummy.c	/^dummy_init(void)$/;"	f
+dummy_isr	driver/dummy.c	/^dummy_isr(unsigned int irq, void *id)$/;"	f	file:
+dummy_ops	driver/dummy.c	/^static struct net_device_ops dummy_ops = {$/;"	v	typeref:struct:net_device_ops	file:
+dummy_transmit	driver/dummy.c	/^dummy_transmit(struct net_device *dev, uint16_t type,$/;"	f	file:
+endian	util.c	/^static int endian;$/;"	v	file:
+errorf	util.h	11;"	d
+flags	net.h	/^  uint16_t flags;$/;"	m	struct:net_device
+flags	platform/linux/intr.c	/^  int flags;$/;"	m	struct:irq_entry	file:
+handler	net.c	/^  void (*handler)(const uint8_t *data, size_t len, struct net_device *dev);$/;"	m	struct:net_protocol	file:
+handler	platform/linux/intr.c	/^  int (*handler)(unsigned int irq, void *dev);$/;"	m	struct:irq_entry	file:
+head	util.h	/^  struct queue_entry *head;$/;"	m	struct:queue_head	typeref:struct:queue_head::queue_entry
+hexdump	util.c	/^hexdump(FILE *fp, const void *data, size_t size)$/;"	f
+hlen	net.h	/^  uint16_t hlen; \/* header length *\/$/;"	m	struct:net_device
+hton16	util.c	/^hton16(uint16_t h)$/;"	f
+hton32	util.c	/^hton32(uint32_t h)$/;"	f
+id	ip.c	/^  uint16_t id;$/;"	m	struct:ip_hdr	file:
+index	net.h	/^  unsigned int index;$/;"	m	struct:net_device
+infof	util.h	13;"	d
+intr_init	platform/linux/intr.c	/^intr_init(void)$/;"	f
+intr_raise_irq	platform/linux/intr.c	/^intr_raise_irq(unsigned int irq)$/;"	f
+intr_request_irq	platform/linux/intr.c	/^intr_request_irq(unsigned int irq, int (*handler)(unsigned int irq, void *dev),$/;"	f
+intr_run	platform/linux/intr.c	/^intr_run(void)$/;"	f
+intr_shutdown	platform/linux/intr.c	/^intr_shutdown(void)$/;"	f
+intr_thread	platform/linux/intr.c	/^intr_thread(void *arg)$/;"	f	file:
+ip_addr_ntop	ip.c	/^ip_addr_ntop(ip_addr_t n, char *p, size_t size)$/;"	f
+ip_addr_pton	ip.c	/^ip_addr_pton(const char *p, ip_addr_t *n)$/;"	f
+ip_addr_t	ip.h	/^typedef uint32_t ip_addr_t;$/;"	t
+ip_dump	ip.c	/^ip_dump(const uint8_t *data, size_t len)$/;"	f	file:
+ip_hdr	ip.c	/^struct ip_hdr {$/;"	s	file:
+ip_init	ip.c	/^ip_init(void)$/;"	f
+ip_input	ip.c	/^ip_input(const uint8_t *data, size_t len, struct net_device *dev)$/;"	f	file:
+irq	driver/loopback.c	/^  int irq;$/;"	m	struct:loopback	file:
+irq	platform/linux/intr.c	/^  unsigned int irq;$/;"	m	struct:irq_entry	file:
+irq_entry	platform/linux/intr.c	/^struct irq_entry {$/;"	s	file:
+irqs	platform/linux/intr.c	/^static struct irq_entry *irqs;$/;"	v	typeref:struct:irq_entry	file:
+len	driver/loopback.c	/^  size_t len;$/;"	m	struct:loopback_queue_entry	file:
+len	net.c	/^  size_t len;$/;"	m	struct:net_protocol_queue_entry	file:
+loopback	driver/loopback.c	/^struct loopback {$/;"	s	file:
+loopback_init	driver/loopback.c	/^loopback_init(void)$/;"	f
+loopback_isr	driver/loopback.c	/^loopback_isr(unsigned int irq, void *id)$/;"	f	file:
+loopback_ops	driver/loopback.c	/^static struct net_device_ops loopback_ops = {$/;"	v	typeref:struct:net_device_ops	file:
+loopback_queue_entry	driver/loopback.c	/^struct loopback_queue_entry {$/;"	s	file:
+loopback_transmit	driver/loopback.c	/^loopback_transmit(struct net_device *dev, uint16_t type, $/;"	f	file:
+lprintf	util.c	/^lprintf(FILE *fp, int level, const char *file, int line, const char *func,$/;"	f
+main	test/step0.c	/^main(void)$/;"	f
+main	test/step1.c	/^main(int argc, char *argv[])$/;"	f
+main	test/step2.c	/^main(int argc, char *argv[])$/;"	f
+main	test/step3.c	/^main(int argc, char *argv[])$/;"	f
+main	test/step4.c	/^main(int argc, char *argv[])$/;"	f
+main	test/step5.c	/^main(int argc, char *argv[])$/;"	f
+main	test/step6.c	/^main(int argc, char *argv[])$/;"	f
+memory_alloc	platform/linux/platform.h	/^memory_alloc(size_t size)$/;"	f
+memory_free	platform/linux/platform.h	/^memory_free(void *ptr)$/;"	f
+mtu	net.h	/^  uint16_t mtu;$/;"	m	struct:net_device
+mutex	driver/loopback.c	/^  mutex_t mutex;$/;"	m	struct:loopback	file:
+mutex_init	platform/linux/platform.h	/^mutex_init(mutex_t *mutex)$/;"	f
+mutex_lock	platform/linux/platform.h	/^mutex_lock(mutex_t *mutex)$/;"	f
+mutex_t	platform/linux/platform.h	/^typedef pthread_mutex_t mutex_t;$/;"	t
+mutex_unlock	platform/linux/platform.h	/^mutex_unlock(mutex_t *mutex)$/;"	f
+name	net.h	/^  char name[IFNAMSIZ];$/;"	m	struct:net_device
+name	platform/linux/intr.c	/^  char name[16];$/;"	m	struct:irq_entry	file:
+net_device	net.h	/^struct net_device {$/;"	s
+net_device_alloc	net.c	/^net_device_alloc(void)$/;"	f
+net_device_close	net.c	/^net_device_close(struct net_device *dev)$/;"	f	file:
+net_device_open	net.c	/^net_device_open(struct net_device *dev)$/;"	f	file:
+net_device_ops	net.h	/^struct net_device_ops {$/;"	s
+net_device_output	net.c	/^net_device_output(struct net_device *dev, uint16_t type, $/;"	f
+net_device_register	net.c	/^net_device_register(struct net_device *dev)$/;"	f
+net_init	net.c	/^net_init(void)$/;"	f
+net_input_handler	net.c	/^net_input_handler(uint16_t type, const uint8_t *data, size_t len,$/;"	f
+net_protocol	net.c	/^struct net_protocol {$/;"	s	file:
+net_protocol_queue_entry	net.c	/^struct net_protocol_queue_entry {$/;"	s	file:
+net_protocol_register	net.c	/^net_protocol_register(uint16_t type, $/;"	f
+net_run	net.c	/^net_run(void)$/;"	f
+net_shutdown	net.c	/^net_shutdown(void)$/;"	f
+net_softirq_handler	net.c	/^net_softirq_handler(void)$/;"	f
+next	net.c	/^  struct net_protocol *next;$/;"	m	struct:net_protocol	typeref:struct:net_protocol::net_protocol	file:
+next	net.h	/^  struct net_device *next;$/;"	m	struct:net_device	typeref:struct:net_device::net_device
+next	platform/linux/intr.c	/^  struct irq_entry *next;$/;"	m	struct:irq_entry	typeref:struct:irq_entry::irq_entry	file:
+next	util.c	/^  struct queue_entry *next;$/;"	m	struct:queue_entry	typeref:struct:queue_entry::queue_entry	file:
+ntoh16	util.c	/^ntoh16(uint16_t n)$/;"	f
+ntoh32	util.c	/^ntoh32(uint32_t n)$/;"	f
+num	util.h	/^  unsigned int num;$/;"	m	struct:queue_head
+offset	ip.c	/^  uint16_t offset;$/;"	m	struct:ip_hdr	file:
+on_signal	test/step1.c	/^on_signal(int s)$/;"	f	file:
+on_signal	test/step2.c	/^on_signal(int s)$/;"	f	file:
+on_signal	test/step3.c	/^on_signal(int s)$/;"	f	file:
+on_signal	test/step4.c	/^on_signal(int s)$/;"	f	file:
+on_signal	test/step5.c	/^on_signal(int s)$/;"	f	file:
+on_signal	test/step6.c	/^on_signal(int s)$/;"	f	file:
+open	net.h	/^  int (*open)(struct net_device *dev);$/;"	m	struct:net_device_ops
+ops	net.h	/^  struct net_device_ops *ops;$/;"	m	struct:net_device	typeref:struct:net_device::net_device_ops
+options	ip.c	/^  uint8_t options[];$/;"	m	struct:ip_hdr	file:
+peer	net.h	/^    uint8_t peer[NET_DEVICE_ADDR_LEN];$/;"	m	union:net_device::__anon1
+priv	net.h	/^  void *priv;$/;"	m	struct:net_device
+protocol	ip.c	/^  uint8_t protocol;$/;"	m	struct:ip_hdr	file:
+protocols	net.c	/^static struct net_protocol *protocols;$/;"	v	typeref:struct:net_protocol	file:
+queue	driver/loopback.c	/^  struct queue_head queue;$/;"	m	struct:loopback	typeref:struct:loopback::queue_head	file:
+queue	net.c	/^  struct queue_head queue; \/* input queue *\/$/;"	m	struct:net_protocol	typeref:struct:net_protocol::queue_head	file:
+queue_entry	util.c	/^struct queue_entry {$/;"	s	file:
+queue_foreach	util.c	/^queue_foreach(struct queue_head *queue, void (*func)(void *arg, void *data),$/;"	f
+queue_head	util.h	/^struct queue_head {$/;"	s
+queue_init	util.c	/^queue_init(struct queue_head *queue)$/;"	f
+queue_peek	util.c	/^queue_peek(struct queue_head *queue)$/;"	f
+queue_pop	util.c	/^queue_pop(struct queue_head *queue)$/;"	f
+queue_push	util.c	/^queue_push(struct queue_head *queue, void *data)$/;"	f
+sigmask	platform/linux/intr.c	/^static sigset_t sigmask;$/;"	v	file:
+src	ip.c	/^  ip_addr_t src;$/;"	m	struct:ip_hdr	file:
+sum	ip.c	/^  uint16_t sum;$/;"	m	struct:ip_hdr	file:
+tail	util.h	/^  struct queue_entry *tail;$/;"	m	struct:queue_head	typeref:struct:queue_head::queue_entry
+terminate	test/step1.c	/^static volatile sig_atomic_t terminate;$/;"	v	file:
+terminate	test/step2.c	/^static volatile sig_atomic_t terminate;$/;"	v	file:
+terminate	test/step3.c	/^static volatile sig_atomic_t terminate;$/;"	v	file:
+terminate	test/step4.c	/^static volatile sig_atomic_t terminate;$/;"	v	file:
+terminate	test/step5.c	/^static volatile sig_atomic_t terminate;$/;"	v	file:
+terminate	test/step6.c	/^static volatile sig_atomic_t terminate;$/;"	v	file:
+test_data	test/test.h	/^const uint8_t test_data[] = {$/;"	v
+tid	platform/linux/intr.c	/^static pthread_t tid;$/;"	v	file:
+tos	ip.c	/^  uint8_t tos;$/;"	m	struct:ip_hdr	file:
+total	ip.c	/^  uint16_t total;$/;"	m	struct:ip_hdr	file:
+transmit	net.h	/^  int (*transmit)(struct net_device *dev, uint16_t type, $/;"	m	struct:net_device_ops
+ttl	ip.c	/^  uint8_t ttl;$/;"	m	struct:ip_hdr	file:
+type	driver/loopback.c	/^  uint16_t type;$/;"	m	struct:loopback_queue_entry	file:
+type	net.c	/^  uint16_t type;$/;"	m	struct:net_protocol	file:
+type	net.h	/^  uint16_t type;$/;"	m	struct:net_device
+vhl	ip.c	/^  uint8_t vhl;$/;"	m	struct:ip_hdr	file:
+warnf	util.h	12;"	d

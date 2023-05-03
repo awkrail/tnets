@@ -27,6 +27,11 @@
 #define NET_POROTOCOL_TYPE_ARP  0x0806
 #define NET_POROTOCOL_TYPE_IPV6 0x86dd
 
+#define NET_IFACE_FAMILY_IP     1
+#define NET_IFACE_FAMILY_IPV6   2
+
+#define NET_IFACE(x) ((struct net_iface *)(x))
+
 struct net_device {
   struct net_device *next;
   unsigned int index;
@@ -41,6 +46,7 @@ struct net_device {
     uint8_t peer[NET_DEVICE_ADDR_LEN];
     uint8_t broadcast[NET_DEVICE_ADDR_LEN];
   };
+  struct net_iface *ifaces;
   struct net_device_ops *ops;
   void *priv;
 };
@@ -52,11 +58,23 @@ struct net_device_ops {
                   const uint8_t *data, size_t len, const void *dst);
 };
 
+struct net_iface {
+  struct net_iface *next;
+  struct net_device *dev;
+  int family;
+};
+
 extern struct net_device *
 net_device_alloc(void);
 
 extern int
 net_device_register(struct net_device *dev);
+
+extern int
+net_device_add_iface(struct net_device *dev, struct net_iface *iface);
+
+struct net_iface *
+net_device_get_iface(struct net_device *dev, int family);
 
 extern int
 net_device_output(struct net_device *dev, uint16_t type, 
