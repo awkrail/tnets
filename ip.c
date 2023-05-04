@@ -200,10 +200,10 @@ ip_input(const uint8_t *data, size_t len, struct net_device *dev)
     errorf("ip_iface_select() failure");
     return;
   }
-  if(hdr->dst != iface->unicast 
-  || hdr->dst != IP_ADDR_BROADCAST 
-  || hdr->dst != iface->broadcast) {
-    return;
+
+  if(hdr->dst != iface->unicast) {
+    if(hdr->dst != iface->broadcast && hdr->dst != IP_ADDR_BROADCAST)
+      return; /* not for this host */
   }
 
   debugf("dev=%s, iface=%s, protocol=%u, total=%u", 
