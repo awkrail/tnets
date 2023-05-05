@@ -285,7 +285,7 @@ ip_output_core(struct ip_iface *iface, uint8_t protocol, const uint8_t *data, si
   hdr->src = src;
   hdr->dst = dst;
   hdr->sum = cksum16((uint16_t *)hdr, hlen, 0);
-  memcpy(hdr+1, data, len); // check it...
+  memcpy(hdr+1, data, len);
 
   debugf("dev=%s, dst=%s, protocol=%u, len=%u",
       NET_IFACE(iface)->dev->name, ip_addr_ntop(dst, addr, sizeof(addr)), protocol, total);

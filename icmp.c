@@ -5,6 +5,8 @@
 #include "ip.h"
 #include "icmp.h"
 
+#define ICMP_BUFSIZ IP_PAYLOAD_SIZE_MAX
+
 struct icmp_hdr {
   uint8_t type;
   uint8_t code;
@@ -76,6 +78,32 @@ icmp_dump(const uint8_t *data, size_t len)
   hexdump(stderr, data, len);
 #endif
   funlockfile(stderr);
+}
+
+int
+icmp_output(uint8_t type, uint8_t code, uint32_t values, 
+            const uint8_t *data, size_t len, ip_addr_t src, ip_addr_t dst)
+{
+  uint8_t buf[ICMP_BUFSIZ];
+  struct icmp_hdr *hdr;
+  size_t msg_len;
+  char addr1[IP_ADDR_STR_LEN];
+  char addr2[IP_ADDR_STR_LEN];
+
+  hdr = (struct icmp_hdr *)buf;
+  hdr->type = type;
+  hdr->code = code;
+  hdr->sum = 0;
+  /*Impling checksum... */
+  //hdr->sum = cksum16((uint16_t *)hdr, )
+
+  debugf("%s => %s, len=%zu", 
+         ip_addr_ntop(src, addr1, sizeof(addr1)),
+         ip_addr_ntop(dst, addr2, sizeof(addr2)),
+         msg_len);
+  icmp_dump((uint8_t *)hdr, msg_len);
+
+
 }
 
 void
