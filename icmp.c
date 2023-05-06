@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include <stddef.h>
+#include <string.h>
 
 #include "util.h"
 #include "ip.h"
@@ -48,9 +49,8 @@ icmp_type_ntoa(uint8_t type)
     return "INFO_REQUEST";
   case ICMP_TYPE_INFO_REPLY:
     return "INFO_REPLY";
-  default:
-    return "OTHER";
   }
+  return "Unknown";
 }
 
 static void
@@ -93,17 +93,18 @@ icmp_output(uint8_t type, uint8_t code, uint32_t values,
   hdr = (struct icmp_hdr *)buf;
   hdr->type = type;
   hdr->code = code;
+  hdr->values = values;
   hdr->sum = 0;
-  /*Impling checksum... */
-  //hdr->sum = cksum16((uint16_t *)hdr, )
+  msg_len = ICMP_HDR_SIZE + len;
+  memcpy(hdr+1, data, len);
+  hdr->sum = cksum16((uint16_t *)hdr, msg_len, 0);
 
   debugf("%s => %s, len=%zu", 
          ip_addr_ntop(src, addr1, sizeof(addr1)),
          ip_addr_ntop(dst, addr2, sizeof(addr2)),
          msg_len);
   icmp_dump((uint8_t *)hdr, msg_len);
-
-
+  return ip_output(IP_PROTOCOL_ICMP, (uint8_t *)hdr, msg_len, src, dst);
 }
 
 void
@@ -129,6 +130,16 @@ icmp_input(const uint8_t *data, size_t len,
       ip_addr_ntop(src, addr1, sizeof(addr1)), 
       ip_addr_ntop(dst, addr2, sizeof(addr2)), len);
   icmp_dump(data, len);
+
+  switch(hdr->type) {
+  case ICMP_TYPE_ECHO:
+    icmp_output(ICMP_TYPE_ECHOREPLY, hdr->code, hdr->values, (uint8_t *)(hdr + 1),
+                len - sizeof(*hdr), iface->unicast, src);
+    break;
+  default:
+    /* ignore */
+    break;
+  }
 }
 
 int
