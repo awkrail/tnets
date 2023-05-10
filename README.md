@@ -1,2 +1,2 @@
-# tnet
-tiny network protocol implementation
+# tnets
+Decided to re-write microps in Rust
