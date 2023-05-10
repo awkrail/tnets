@@ -1,2 +1,2 @@
 # tnets
-Decided to re-write microps in Rust
+Rust implementation of TCP/IP protocol stack
