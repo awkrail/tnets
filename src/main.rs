@@ -1,3 +1,6 @@
+#[macro_use] extern crate log;
+extern crate env_logger as logger;
+
 mod util;
 
 const LOOPBACK_IP_ADDR: &str = "127.0.0.1";
@@ -26,5 +29,7 @@ const TEST_DATA: [u8; 48] = [
 ];
 
 fn main() {
-    util::debugf(file!(), line!(), function_name!(), vec!["hello, world!"]);
+    logger::init();
+    //debug!("Hello, world!");
+    util::debug("Hello, world");
 }
