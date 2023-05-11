@@ -2,6 +2,7 @@
 extern crate env_logger as logger;
 
 mod util;
+mod net;
 
 const LOOPBACK_IP_ADDR: &str = "127.0.0.1";
 const LOOPBACK_NETMASK: &str = "255.0.0.0";
@@ -30,6 +31,15 @@ const TEST_DATA: [u8; 48] = [
 
 fn main() {
     logger::init();
-    //debug!("Hello, world!");
-    util::debug("Hello, world");
+    
+    devices = Vec::new();
+
+    if net_init() == -1 {
+        error!("net_init() failure");
+        return;
+    }
+
+    // TODO: implement dummy
+    //dev = dummy_init();
+
 }
