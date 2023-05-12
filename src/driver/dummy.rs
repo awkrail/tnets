@@ -1,12 +1,14 @@
+use crate::net;
+
 const DUMMY_MTU: u16 = u16::MAX;
 
-pub fn dummy_init()
+pub fn dummy_init() -> net::NetDevice
 {
-    let dummy_device = NetDevice {
-        dev_type: NET_DEVICE_TYPE_DUMMY,
-        mtu: DUMMY_MTU,
-        hlen: 0,
-        alen: 0,
-    };
-    dummy_device
+    let name = String::from("net0");
+    let dev_type = net::NET_DEVICE_TYPE_DUMMY;
+    let mtu = DUMMY_MTU;
+    let flags = 0;
+    let hlen = 0;
+    let alen = 0;
+    net::NetDevice::new(name, dev_type, mtu, flags, hlen, alen)
 }

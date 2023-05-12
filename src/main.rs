@@ -3,7 +3,9 @@ extern crate env_logger as logger;
 
 mod util;
 mod net;
-mod dummy;
+mod driver {
+    pub mod dummy;
+}
 
 const LOOPBACK_IP_ADDR: &str = "127.0.0.1";
 const LOOPBACK_NETMASK: &str = "255.0.0.0";
@@ -33,23 +35,25 @@ const TEST_DATA: [u8; 48] = [
 fn main() {
     logger::init();
     
-    devices = Vec::new();
+    let mut devices = Vec::new();
 
-    if net_init() == -1 {
+    if net::net_init() == -1 {
         error!("net_init() failure");
         return;
     }
 
     // TODO: implement dummy
-    let dummy = dummy_init();
+    let mut dummy = driver::dummy::dummy_init();
     devices.push(dummy);
 
-    if net_run() == -1 {
+    if net::net_run(&mut devices) == -1 {
         error!("net_run() failure");    
         return;
     }
 
     let dev_type = 0x800;
     let len = TEST_DATA.len();
-    net_output(devices, dev_type, TEST_DATA, len);
+    net::net_output(&mut devices, dev_type, TEST_DATA, len);
+
+    net::net_shutdown(&mut devices);
 }

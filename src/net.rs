@@ -1,16 +1,15 @@
-const IFNAMSIZ: u8 = 16;
-const NET_DEVICE_TYPE_DUMMY: u8     = 0x0000;
-const NET_DEVICE_TYPE_LOOPBACK: u8  = 0x0001;
-const NET_DEVICE_TYPE_ETHERNET: u8  = 0x0002;
-const NET_DEVICE_FLAG_UP: u8        = 0x0001;
-const NET_DEVICE_FLAG_LOOPBACK: u8  = 0x0010;
-const NET_DEVICE_FLAG_BROADCAST: u8 = 0x0020;
-const NET_DEVICE_FLAG_P2P: u8       = 0x0040;
-const NET_DEVICE_FLAG_NEED_ARP: u8  = 0x0100;
-const NET_DEVCIE_ADDR_LEN: u8       =     16;
+pub const IFNAMSIZ: u16 = 16;
+pub const NET_DEVICE_TYPE_DUMMY: u16     = 0x0000;
+pub const NET_DEVICE_TYPE_LOOPBACK: u16  = 0x0001;
+pub const NET_DEVICE_TYPE_ETHERNET: u16  = 0x0002;
+pub const NET_DEVICE_FLAG_UP: u16        = 0x0001;
+pub const NET_DEVICE_FLAG_LOOPBACK: u16  = 0x0010;
+pub const NET_DEVICE_FLAG_BROADCAST: u16 = 0x0020;
+pub const NET_DEVICE_FLAG_P2P: u16       = 0x0040;
+pub const NET_DEVICE_FLAG_NEED_ARP: u16  = 0x0100;
+pub const NET_DEVCIE_ADDR_LEN: u16       =     16;
 
-
-struct NetDevice {
+pub struct NetDevice { 
     name: String,
     dev_type: u16,
     mtu: u16,
@@ -21,9 +20,9 @@ struct NetDevice {
 }
 
 impl NetDevice {
-    fn new(name: String, dev_type: u16, mtu: u16, flags: u16, hlen: u16, alen: u16) -> Self 
+    pub fn new(name: String, dev_type: u16, mtu: u16, flags: u16, hlen: u16, alen: u16) -> Self 
     {
-        net_device {
+        NetDevice {
             name: name,
             dev_type: dev_type,
             mtu: mtu,
@@ -33,42 +32,28 @@ impl NetDevice {
         }
     }
 
-    fn is_up_net_device(flags: u16) -> bool 
-    {
-        flags & NET_DEVICE_FLAG_UP
-    }
-
-    fn get_state(flags: u16) -> &str 
-    {
-        if self.is_up_net_device(flags) {
-            "up"
-        } else {
-            "down"
-        }
-    }
-
-    fn open(&self) -> u8
+    fn open(&self) -> i8
     {
         0
     }
 
-    fn close(&self) -> u8
+    fn close(&self) -> i8
     {
         0
     }
 
-    fn transmit(&self, dev_type: u16, data: u8, len: usize) -> u8
+    fn transmit(&self, dev_type: u16, data: [u8; 48], len: usize) -> i8
     {
-        if &self.dev_type == NET_DEVICE_TYPE_DUMMY {
+        if self.dev_type == NET_DEVICE_TYPE_DUMMY {
             debug!("dev={}, type={:04X}, len={}", self.name, dev_type, len);
         }
 
         0
     }
 
-    fn open_device(&self) -> i8 
+    fn open_device(&mut self) -> i8 
     {
-        if self.is_up_net_device(self.flags) {
+        if is_up_net_device(self.flags) {
             error!("already opened, dev={}", self.name);
             return -1;
         }
@@ -78,14 +63,14 @@ impl NetDevice {
             return -1;
         }
 
-        dev.flags |= NET_DEVICE_FLAG_UP;
-        info!("dev={}, state={}", self.name, self.get_state(self.flags));
+        self.flags |= NET_DEVICE_FLAG_UP;
+        info!("dev={}, state={}", self.name, get_state(self.flags));
         0
     }
 
-    fn close_device(&self) -> i8
+    fn close_device(&mut self) -> i8
     {
-        if !self.is_up_net_device(self.flags) {
+        if !is_up_net_device(self.flags) {
             error!("not opened, dev={}", self.name);
             return -1;
         }
@@ -95,40 +80,55 @@ impl NetDevice {
             return -1;
         }
 
-        self.flags &= ~NET_DEVICE_FLAG_UP;
-        info!("dev={}, state={}", self.name, self.get_state(self.flags));
+        self.flags &= !NET_DEVICE_FLAG_UP;
+        info!("dev={}, state={}", self.name, get_state(self.flags));
         0
     }
 
-    fn output(&self, dev_type: u16, data: u8, len: usize)
+    fn output(&self, dev_type: u16, data: [u8; 48], len: usize) -> i8
     {
-        if !self.is_up_net_device(self.flags)  {
-            error!("not opened, dev={}", dev.name);
+        if !is_up_net_device(self.flags)  {
+            error!("not opened, dev={}", self.name);
             return -1;
         }
-        if len > self.mtu {
-            error!("too long, dev={}, mtu={}, len={}", dev.name, dev.mtu, len);
+        if len > self.mtu.into() {
+            error!("too long, dev={}, mtu={}, len={}", self.name, self.mtu, len);
             return -1;
         }
         
-        debug!("dev={}, type=0x{:04X}, len={}", dev.name, dev_type, len);
+        debug!("dev={}, type=0x{:04X}, len={}", self.name, dev_type, len);
         if self.transmit(dev_type, data, len) == -1 {
-            error!("transmit() failure, dev={}, len={}", dev.name, len);
+            error!("transmit() failure, dev={}, len={}", self.name, len);
         }
 
         0
     }
 
-    fn input(&self, dev_type: u16, data: u8)
+    fn input(&self, dev_type: u16, data: u8, len: u16) -> i8
     {
         debug!("dev={}, type={}, len={}", self.name, dev_type, len);
         0
     }
 }
 
-pub fn net_run(devices: Vec<NetDevice>) -> i8 
+fn is_up_net_device(flags: u16) -> bool 
 {
-    for device in devices.iter() {
+    flags & NET_DEVICE_FLAG_UP == 1
+
+}
+
+fn get_state(flags: u16) -> String
+{
+    if is_up_net_device(flags) {
+        String::from("up")
+    } else {
+        String::from("down")
+    }
+}
+
+pub fn net_run(devices: &mut Vec<NetDevice>) -> i8 
+{
+    for device in devices.iter_mut() {
         let ret = device.open_device();
         if ret == -1 {
             return -1;
@@ -138,9 +138,9 @@ pub fn net_run(devices: Vec<NetDevice>) -> i8
     0
 }
 
-pub fn net_shutdown(devices: Vec<NetDevice>) -> i8
+pub fn net_shutdown(devices: &mut Vec<NetDevice>) -> i8
 {
-    for device in devices.iter() {
+    for device in devices.iter_mut() {
         let ret = device.close_device();
         if ret == -1 {
             return -1;
@@ -150,7 +150,8 @@ pub fn net_shutdown(devices: Vec<NetDevice>) -> i8
     0
 }
 
-pub fn net_output(devices: Vec<NetDevice>, dev_type: u16, data: u8, len: usize) -> u8
+pub fn net_output(devices: &mut Vec<NetDevice>, dev_type: u16, 
+                data: [u8; 48], len: usize) -> i8
 {
     for device in devices.iter() {
         let ret = device.output(dev_type, data, len);
