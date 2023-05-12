@@ -17,12 +17,11 @@ struct NetDevice {
     flags: u16,
     hlen: u16,
     alen: u16,
-    addr: [u8; NET_DEVICE_ADDR_LEN]
+    //addr: [u8; NET_DEVICE_ADDR_LEN]
 }
 
 impl NetDevice {
-    fn new(name: String, dev_type: u16, mtu: u16, flags: u16,
-           hlen: u16, alen: u16, addr: [u8; NET_DEVICE_ADDR_LEN]) -> Self 
+    fn new(name: String, dev_type: u16, mtu: u16, flags: u16, hlen: u16, alen: u16) -> Self 
     {
         net_device {
             name: name,
@@ -31,13 +30,8 @@ impl NetDevice {
             flags: flags,
             hlen: hlen,
             alen: alen,
-            addr: addr
         }
     }
-
-    fn open(&self) {}
-    fn close(&self) {}
-    fn transmit(&self) {}
 
     fn is_up_net_device(flags: u16) -> bool 
     {
@@ -46,41 +40,69 @@ impl NetDevice {
 
     fn get_state(flags: u16) -> &str 
     {
-        if is_up_net_device(flags) {
+        if self.is_up_net_device(flags) {
             "up"
         } else {
             "down"
         }
     }
 
+    fn open(&self) -> u8
+    {
+        0
+    }
+
+    fn close(&self) -> u8
+    {
+        0
+    }
+
+    fn transmit(&self, dev_type: u16, data: u8, len: usize) -> u8
+    {
+        if &self.dev_type == NET_DEVICE_TYPE_DUMMY {
+            debug!("dev={}, type={:04X}, len={}", self.name, dev_type, len);
+        }
+
+        0
+    }
+
     fn open_device(&self) -> i8 
     {
-        if is_up_net_device(self.flags) {
+        if self.is_up_net_device(self.flags) {
             error!("already opened, dev={}", self.name);
             return -1;
         }
-        // TODO: impling open
+        
+        if self.open() == -1 {
+            error!("open() failure, dev={}", self.name);
+            return -1;
+        }
 
         dev.flags |= NET_DEVICE_FLAG_UP;
-        info!("dev={}, state={}", self.name, get_state(self.flags));
+        info!("dev={}, state={}", self.name, self.get_state(self.flags));
         0
     }
 
     fn close_device(&self) -> i8
     {
-        if !is_up_net_device(self.flags) {
+        if !self.is_up_net_device(self.flags) {
             error!("not opened, dev={}", self.name);
             return -1;
         }
-        // TODO: impling close
+        
+        if self.close() == -1 {
+            error!("close() failure, dev={}", self.name);
+            return -1;
+        }
+
         self.flags &= ~NET_DEVICE_FLAG_UP;
-        info!("dev={}, state={}", self.name, get_state(self.flags));
+        info!("dev={}, state={}", self.name, self.get_state(self.flags));
         0
     }
 
     fn output(&self, dev_type: u16, data: u8, len: usize)
     {
-        if !is_up_net_device(self.flags)  {
+        if !self.is_up_net_device(self.flags)  {
             error!("not opened, dev={}", dev.name);
             return -1;
         }
@@ -90,7 +112,10 @@ impl NetDevice {
         }
         
         debug!("dev={}, type=0x{:04X}, len={}", dev.name, dev_type, len);
-        // TODO: transmit
+        if self.transmit(dev_type, data, len) == -1 {
+            error!("transmit() failure, dev={}, len={}", dev.name, len);
+        }
+
         0
     }
 
@@ -101,21 +126,38 @@ impl NetDevice {
     }
 }
 
-pub fn net_run(devices: Vec<net_device>) -> i8 
+pub fn net_run(devices: Vec<NetDevice>) -> i8 
 {
     for device in devices.iter() {
-        device.open_device();
+        let ret = device.open_device();
+        if ret == -1 {
+            return -1;
+        }
     }
     debug!("running...");
     0
 }
 
-pub fn net_shutdown(devices: Vec<net_device>) -> i8
+pub fn net_shutdown(devices: Vec<NetDevice>) -> i8
 {
     for device in devices.iter() {
-        device.close_device();
+        let ret = device.close_device();
+        if ret == -1 {
+            return -1;
+        }
     }
     debug!("shutting down...");
+    0
+}
+
+pub fn net_output(devices: Vec<NetDevice>, dev_type: u16, data: u8, len: usize) -> u8
+{
+    for device in devices.iter() {
+        let ret = device.output(dev_type, data, len);
+        if ret == -1 {
+            return -1;
+        }
+    }
     0
 }
 

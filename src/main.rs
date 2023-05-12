@@ -3,6 +3,7 @@ extern crate env_logger as logger;
 
 mod util;
 mod net;
+mod dummy;
 
 const LOOPBACK_IP_ADDR: &str = "127.0.0.1";
 const LOOPBACK_NETMASK: &str = "255.0.0.0";
@@ -40,6 +41,15 @@ fn main() {
     }
 
     // TODO: implement dummy
-    //dev = dummy_init();
+    let dummy = dummy_init();
+    devices.push(dummy);
 
+    if net_run() == -1 {
+        error!("net_run() failure");    
+        return;
+    }
+
+    let dev_type = 0x800;
+    let len = TEST_DATA.len();
+    net_output(devices, dev_type, TEST_DATA, len);
 }
