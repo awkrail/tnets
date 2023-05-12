@@ -10,8 +10,8 @@ const NET_DEVICE_FLAG_NEED_ARP: u8  = 0x0100;
 const NET_DEVCIE_ADDR_LEN: u8       =     16;
 
 
-struct net_device {
-    name: &str,
+struct NetDevice {
+    name: String,
     dev_type: u16,
     mtu: u16,
     flags: u16,
@@ -20,8 +20,8 @@ struct net_device {
     addr: [u8; NET_DEVICE_ADDR_LEN]
 }
 
-impl net_device {
-    fn new(name: &str, dev_type: u16, mtu: u16, flags: u16,
+impl NetDevice {
+    fn new(name: String, dev_type: u16, mtu: u16, flags: u16,
            hlen: u16, alen: u16, addr: [u8; NET_DEVICE_ADDR_LEN]) -> Self 
     {
         net_device {
