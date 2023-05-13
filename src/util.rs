@@ -3,64 +3,53 @@ pub fn is_little_endian() -> bool
     true
 }
 
-pub fn byteswap(v: T) -> T
+pub trait Byteswap 
 {
-    // if v is u16
-    byteswap16(v);
-
-    // else if v is u32
-    byteswap32(v);
+    fn byteswap(&self) -> Self
+    where
+        Self: Sized;
 }
 
-fn byteswap16(v: u16) -> u16
+impl Byteswap for u16
 {
-    (v & 0x00ff) << 8 | (v & 0xff00) >> 8
+    fn byteswap(&self) -> u16 {
+        (*self & 0x00ff) << 8 | (*self & 0xff00) >> 8
+    }
 }
 
-fn byteswap32(v: u32) -> u32
+impl Byteswap for u32
 {
-    (v & 0x000000ff) << 24 | (v & 0x0000ff00 << 8 | (v & 0x00ff0000) >> 8 | (v & 0xff000000) >> 24
+    fn byteswap(&self) -> u32 {
+        (*self & 0x000000ff) << 24 | (*self & 0x0000ff00) << 8 
+            | (*self & 0x00ff0000) >> 8 | (*self & 0xff000000) >> 24
+    }
 }
 
-pub fn hton(h: T) -> T
+pub fn byteswap<T>(v: T) -> T
+where T: Byteswap
 {
-    // if h is u16
-    hton16(h);
-
-    // else if v is u32
-    hton32(h);
+    v.byteswap()
 }
 
-fn hton16(h: u16) -> u16
+pub fn hton<T: Byteswap>(h: T) -> T
 {
-    0
+    if is_little_endian() {
+        byteswap(h)
+    } else {
+        h
+    }
 }
 
-fn hton32(h: u32) -> u32
+pub fn ntoh<T: Byteswap>(n: T) -> T
 {
-    0
+    if is_little_endian() {
+        byteswap(n)
+    } else {
+        n
+    }
 }
 
-pub fn ntoh(n: T) -> T
-{
-    // if v is u16
-    ntoh16(n);
-
-    // else if v is u32
-    ntoh32(n);
-}
-
-fn ntoh16(n: u16) -> u16
-{
-    0
-}
-
-fn ntoh32(n: u32) -> u32`
-{
-    0
-}
-
-fn cksum16() -> u16
+pub fn cksum16() -> u16
 {
     0
 }
