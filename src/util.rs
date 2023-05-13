@@ -1,6 +1,8 @@
 pub fn is_little_endian() -> bool
 {
-    true
+    let x: u32 = 0x00000001;
+    let bytes = x.to_le_bytes();
+    bytes[0] == 1
 }
 
 pub trait Byteswap 
