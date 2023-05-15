@@ -1,3 +1,38 @@
+use chrono::Local;
+use env_logger::{fmt::Color, Builder};
+use log::{Level, trace, debug, info, warn, error};
+use std::io::Write;
+
+pub fn init_logger() {
+    let mut builder = Builder::new();
+
+    builder.format(|buf, record| {
+        let level_color = match record.level() {
+            Level::Trace => Color::White,
+            Level::Debug => Color::Blue,
+            Level::Info => Color::Green,
+            Level::Warn => Color::Yellow,
+            Level::Error => Color::Red,
+        };
+        let mut level_style = buf.style();
+        level_style.set_color(level_color);
+        
+        writeln!(
+            buf,
+            "{file}:{line} {level} [{time}] - {args}",
+            file = level_style.value(record.file().unwrap_or("unknown")),
+            line = level_style.value(record.line().unwrap_or(0)),
+            level = level_style.value(record.level()),
+            time = level_style.value(Local::now().format("%Y-%m-%dT%H:%M:%S")),
+            args = level_style.value(record.args()),
+        )
+    });
+    builder.filter(None, log::LevelFilter::Trace);
+    builder.write_style(env_logger::WriteStyle::Auto);
+    builder.init();
+}
+
+// byte order
 pub fn is_little_endian() -> bool
 {
     let x: u32 = 0x00000001;

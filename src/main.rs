@@ -1,5 +1,4 @@
 #[macro_use] extern crate log;
-extern crate env_logger as logger;
 
 mod util;
 mod net;
@@ -33,8 +32,8 @@ const TEST_DATA: [u8; 48] = [
 ];
 
 fn main() {
-    logger::init();
-    
+    util::init_logger();
+
     let mut devices = Vec::new();
 
     if net::net_init() == -1 {
@@ -42,7 +41,6 @@ fn main() {
         return;
     }
 
-    // TODO: implement dummy
     let mut dummy = driver::dummy::dummy_init();
     devices.push(dummy);
 
